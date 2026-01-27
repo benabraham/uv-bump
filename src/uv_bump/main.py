@@ -25,6 +25,7 @@ class UVSyncError(Exception):  # noqa: D101
     def __str__(self) -> str:  # noqa: D105
         return f"UVSyncError(exit_code={self.exit_code}, message=\n" + self.msg + ")"
 
+
 def _print_changes_table(
     before_versions: dict[str, str],
     packages_updated: list[str],
@@ -69,12 +70,10 @@ def upgrade(
 
     lock_after = collect_package_versions_from_lock_file(lock_path)
 
-    package_version_after = collect_package_versions_from_lock_file(lock_path)
-
     pyproject_files = collect_all_pyproject_files(lock_path)
     for pyproject_file in pyproject_files:
         packages_updated, before_versions = update_pyproject_toml(
-            pyproject_file, package_version_after
+            pyproject_file, lock_after
         )
 
         if verbose:
@@ -85,6 +84,7 @@ def upgrade(
                 lock_before,
                 lock_after,
             )
+
 
 def run_uv_sync() -> None:
     """

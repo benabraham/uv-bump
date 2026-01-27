@@ -4,7 +4,6 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
-from pytest import CaptureFixture
 
 from uv_bump.main import (
     UVSyncError,
@@ -135,7 +134,9 @@ def test_update_keep_comment() -> None:
     assert packages_updated == ["polars"]
 
 
-def test_upgrade_verbose_shows_correct_before_after_versions(tmp_path: Path, capsys: CaptureFixture[str]) -> None:
+def test_upgrade_verbose_shows_correct_before_after_versions(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
     # Lock file content before uv sync
     lock_before = """[[package]]
 name = "uv-bump"
@@ -191,10 +192,11 @@ dependencies = [
 
 
 def test_upgrade_verbose_shows_correct_before_after_from_pyproject_bug(
-    tmp_path: Path, lock_file_contents: str, pyproject_toml_contents: str, capsys: CaptureFixture[str]
+    tmp_path: Path,
+    lock_file_contents: str,
+    pyproject_toml_contents: str,
+    capsys: pytest.CaptureFixture[str],
 ) -> None:
-
-
     lock_file = tmp_path / "uv.lock"
     lock_file.write_text(lock_file_contents)  # lock already has 1.21.0
 
